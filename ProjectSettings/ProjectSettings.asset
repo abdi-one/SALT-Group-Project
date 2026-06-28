@@ -4,7 +4,7 @@
 PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 28
-  productGUID: 836285cb165f4784fb79b73e8a78e202
+  productGUID: 5ca7c343e4a9d854f96e72693c1cdee5
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
   AndroidEnableSustainedPerformanceMode: 0
@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: DefaultCompany
-  productName: RGP204 - 2D Platformer
+  productName: Assessment1 - 2D Platform
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -797,14 +797,14 @@ PlayerSettings:
   editorAssembliesCompatibilityLevel: 1
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: RGP204 - 2D Platformer
+  metroPackageName: Assessment1 - 2D Platform
   metroPackageVersion: 
   metroCertificatePath: 
   metroCertificatePassword: 
   metroCertificateSubject: 
   metroCertificateIssuer: 
   metroCertificateNotAfter: 0000000000000000
-  metroApplicationDescription: RGP204 - 2D Platformer
+  metroApplicationDescription: Assessment1 - 2D Platform
   wsaImages: {}
   metroTileShortName: 
   metroTileShowName: 0
@@ -875,10 +875,10 @@ PlayerSettings:
   captureStartupLogs: {}
   activeInputHandler: 2
   windowsGamepadBackendHint: 0
-  cloudProjectId: bd46adc8-cf3e-442e-8fb3-9fc756288cd2
+  cloudProjectId: 4c51cdd0-e936-406a-8b99-708a4b939d02
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: RGP204 - 2D Platformer
+  projectName: Assessment1 - 2D Platform
   organizationId: saiphomma
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
