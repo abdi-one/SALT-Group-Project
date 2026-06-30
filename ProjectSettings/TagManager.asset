@@ -14,8 +14,13 @@ TagManager:
   - Water
   - UI
   - Wall
+<<<<<<< HEAD
   - Enemy
   - 
+=======
+  - Player
+  - Enemy
+>>>>>>> fa82fb57fadfa6be0c84f412fff88b3f50e759c4
   - 
   - 
   - 
