@@ -3,24 +3,17 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags:
-  - Ground
-  - Enemy
+  tags: []
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Ground
+  - 
   - Water
   - UI
-  - Wall
-<<<<<<< HEAD
-  - Enemy
   - 
-=======
-  - Player
-  - Enemy
->>>>>>> fa82fb57fadfa6be0c84f412fff88b3f50e759c4
+  - 
+  - 
   - 
   - 
   - 
@@ -47,21 +40,6 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
-    locked: 0
-  - name: Background
-    uniqueID: 1615017541
-    locked: 0
-  - name: Foreground
-    uniqueID: 3913671359
-    locked: 0
-  - name: Player
-    uniqueID: 2472016581
-    locked: 0
-  - name: Ground
-    uniqueID: 3378449843
-    locked: 0
-  - name: Enemy
-    uniqueID: 7843795
     locked: 0
   m_RenderingLayers:
   - Default
