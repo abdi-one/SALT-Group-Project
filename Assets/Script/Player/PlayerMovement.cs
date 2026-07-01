@@ -17,45 +17,44 @@ public class PlayerMovement : MonoBehaviour
     [Header("Layer")]
     [SerializeField] private LayerMask groundLayer;
     
+    private float horizontalInput;
     private Rigidbody2D body;
     private Animator anim;
     private BoxCollider2D boxCollider;
 
     private void Awake()
     {
-        //grab references
         body = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         boxCollider = GetComponent<BoxCollider2D>();
+        body.gravityScale = 7;
     }
 
     private void Update()
     {
-        //player movement
-        float horizontalInput =  Input.GetAxis("Horizontal");
+        float horizontalInput = Input.GetAxis("Horizontal");
+
+        // player movement
         body.linearVelocity = new Vector2(horizontalInput * speed, body.linearVelocity.y);
-        
-        //flip player when moving left-right
-        if(horizontalInput > 0.01f)
+
+        // flip player when moving left-right
+        if (horizontalInput > 0.01f)
             transform.localScale = Vector3.one;
         else if (horizontalInput < -0.01f)
             transform.localScale = new Vector3(-1, 1, 1);
+
+        // set animator parameters
+        anim.SetBool("walk", horizontalInput != 0);
+        anim.SetBool("grounded", isGrounded());
         
-        //set animator parameters
-            anim.SetBool("walk", horizontalInput != 0);
-            anim.SetBool("grounded",  isGrounded());
-            
-        //player jump logic
         if (Input.GetKeyDown(KeyCode.Space))
             Jump();
-        
-        //adjustable jump height
+
+        // adjustable jump height
         if (Input.GetKeyUp(KeyCode.Space) && body.linearVelocity.y > 0)
             body.linearVelocity = new Vector2(body.linearVelocity.x, body.linearVelocity.y / 2);
 
-        body.gravityScale = 7;
-        body.linearVelocity = new Vector2(horizontalInput * speed, body.linearVelocity.y);
-        
+        // coyote time and jump counter
         if (isGrounded())
         {
             coyoteCounter = coyoteTime;
@@ -66,18 +65,18 @@ public class PlayerMovement : MonoBehaviour
             coyoteCounter -= Time.deltaTime;
         }
     }
-
+    // player jump logic
     private void Jump()
     {
-        if(coyoteCounter <=0 && jumpCounter <= 0) return;
-        
+        if (coyoteCounter <= 0 && jumpCounter <= 0) 
+            return;
         if (isGrounded())
         {
             body.linearVelocity = new Vector2(body.linearVelocity.x, jumpPower);
         }
         else
         {
-            if(coyoteCounter > 0)
+            if (coyoteCounter > 0)
                 body.linearVelocity = new Vector2(body.linearVelocity.x, jumpPower);
             else
             {
@@ -88,11 +87,21 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
         }
+        
+        coyoteCounter = 0;
     }
 
+    // check if player is grounded or not
     private bool isGrounded()
     {
-        RaycastHit2D raycastHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0, Vector2.down, 0.1f, groundLayer);
+        RaycastHit2D raycastHit = Physics2D.BoxCast(
+            boxCollider.bounds.center,
+            boxCollider.bounds.size,
+            0,
+            Vector2.down,
+            0.1f,
+            groundLayer
+        );
         return raycastHit.collider != null;
     }
 }

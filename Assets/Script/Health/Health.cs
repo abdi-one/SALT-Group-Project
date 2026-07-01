@@ -9,11 +9,12 @@ public class Health : MonoBehaviour
     public float currentHealth { get; private set; }
     private Animator anim;
     private bool dead;
-    
+
     [Header("iFrames")]
     [SerializeField] private float iFramesDuration;
     [SerializeField] private int numberOfFlashes;
     private SpriteRenderer spriteRend;
+    private bool invulnerable; // track if player is currently in iframes
 
     private void Awake()
     {
@@ -24,6 +25,9 @@ public class Health : MonoBehaviour
 
     public void TakeDamage(float _damage)
     {
+        // do nothing if currently in iframes
+        if (invulnerable) return;
+
         currentHealth = Mathf.Clamp(currentHealth - _damage, 0, startingHealth);
 
         if (currentHealth > 0)
@@ -41,6 +45,7 @@ public class Health : MonoBehaviour
             }
         }
     }
+
     public void AddHealth(float _value)
     {
         currentHealth = Mathf.Clamp(currentHealth + _value, 0, startingHealth);
@@ -48,7 +53,9 @@ public class Health : MonoBehaviour
 
     private IEnumerator Invunerability()
     {
+        invulnerable = true;
         Physics2D.IgnoreLayerCollision(7, 8, true);
+
         for (int i = 0; i < numberOfFlashes; i++)
         {
             spriteRend.color = new Color(1, 0, 0, 0.5f);
@@ -56,6 +63,8 @@ public class Health : MonoBehaviour
             spriteRend.color = Color.white;
             yield return new WaitForSeconds(iFramesDuration / (numberOfFlashes * 2));
         }
+
         Physics2D.IgnoreLayerCollision(7, 8, false);
+        invulnerable = false;
     }
 }
