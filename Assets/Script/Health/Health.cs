@@ -14,7 +14,10 @@ public class Health : MonoBehaviour
     [SerializeField] private float iFramesDuration;
     [SerializeField] private int numberOfFlashes;
     private SpriteRenderer spriteRend;
-    private bool invulnerable; // track if player is currently in iframes
+    private bool invulnerable;
+
+    [Header("Death Screen")]
+    [SerializeField] private DeathScreen deathScreen;
 
     private void Awake()
     {
@@ -25,7 +28,6 @@ public class Health : MonoBehaviour
 
     public void TakeDamage(float _damage)
     {
-        // do nothing if currently in iframes
         if (invulnerable) return;
 
         currentHealth = Mathf.Clamp(currentHealth - _damage, 0, startingHealth);
@@ -42,6 +44,7 @@ public class Health : MonoBehaviour
                 anim.SetTrigger("die");
                 GetComponent<PlayerMovement>().enabled = false;
                 dead = true;
+                StartCoroutine(ShowDeathScreenDelayed());
             }
         }
     }
@@ -49,6 +52,12 @@ public class Health : MonoBehaviour
     public void AddHealth(float _value)
     {
         currentHealth = Mathf.Clamp(currentHealth + _value, 0, startingHealth);
+    }
+
+    private IEnumerator ShowDeathScreenDelayed()
+    {
+        yield return new WaitForSeconds(1f); // let die animation play first
+        deathScreen.ShowDeathScreen();
     }
 
     private IEnumerator Invunerability()
