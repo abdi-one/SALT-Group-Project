@@ -6,21 +6,27 @@ public class TripLaser : MonoBehaviour
 {
     [SerializeField] private float damage;
 
-    [Header("Trip Laser Timer")] 
+    [Header("Trip Laser Timer")]
     [SerializeField] private float activationDelay;
     [SerializeField] private float activeTime;
-    private Animator anim;
+    [SerializeField] private float damageInterval = 0.5f;
+
     private SpriteRenderer spriteRenderer;
-
     private bool triggered;
-    private bool active;
-
     private Collider2D playerInside;
 
     private void Awake()
     {
-        anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+
+        // disable animator permanently so it never interferes
+        Animator anim = GetComponent<Animator>();
+        if (anim != null) anim.enabled = false;
+    }
+
+    private void Start()
+    {
+        spriteRenderer.color = Color.white;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -32,7 +38,7 @@ public class TripLaser : MonoBehaviour
                 StartCoroutine(ActivateTripLaser());
         }
     }
-    //laser hurt player
+
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.tag == "Player")
@@ -43,23 +49,22 @@ public class TripLaser : MonoBehaviour
     {
         triggered = true;
         spriteRenderer.color = Color.red;
+
         yield return new WaitForSeconds(activationDelay);
+
         spriteRenderer.color = Color.green;
-        active = true;
-        anim.SetBool("activated", true);
+
         float timer = 0f;
         while (timer < activeTime)
         {
             if (playerInside != null)
                 playerInside.GetComponent<Health>().TakeDamage(damage);
 
-            timer += Time.deltaTime;
-            yield return null;
+            yield return new WaitForSeconds(damageInterval);
+            timer += damageInterval;
         }
 
-        active = false;
         triggered = false;
-        anim.SetBool("activated", false);
         spriteRenderer.color = Color.white;
         playerInside = null;
     }
