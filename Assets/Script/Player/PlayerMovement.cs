@@ -1,7 +1,7 @@
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
-{
+public class PlayerMovement : RewindedP
+{   
     [Header("Movement Parameters")]
     [SerializeField] private float speed;
     [SerializeField] private float jumpPower;
@@ -30,7 +30,7 @@ public class PlayerMovement : MonoBehaviour
         body.gravityScale = 7;
     }
 
-    private void Update()
+    public override void TimeUpdate()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
 
@@ -103,5 +103,5 @@ public class PlayerMovement : MonoBehaviour
             groundLayer
         );
         return raycastHit.collider != null;
-    }
+    }    
 }
