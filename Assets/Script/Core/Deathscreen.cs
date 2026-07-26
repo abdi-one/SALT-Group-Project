@@ -9,6 +9,7 @@ public class DeathScreen : MonoBehaviour
 
     private bool canRestart = false;
 
+    // called by Health.cs when the player dies
     public void ShowDeathScreen()
     {
         deathPanel.SetActive(true);

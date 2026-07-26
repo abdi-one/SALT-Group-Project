@@ -1,7 +1,7 @@
 using UnityEngine;
 
-public class PlayerMovement : RewindedP
-{   
+public class PlayerMovement : MonoBehaviour
+{
     [Header("Movement Parameters")]
     [SerializeField] private float speed;
     [SerializeField] private float jumpPower;
@@ -17,7 +17,6 @@ public class PlayerMovement : RewindedP
     [Header("Layer")]
     [SerializeField] private LayerMask groundLayer;
     
-    private float horizontalInput;
     private Rigidbody2D body;
     private Animator anim;
     private BoxCollider2D boxCollider;
@@ -30,7 +29,7 @@ public class PlayerMovement : RewindedP
         body.gravityScale = 7;
     }
 
-    public override void TimeUpdate()
+    private void Update()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
 
@@ -46,7 +45,8 @@ public class PlayerMovement : RewindedP
         // set animator parameters
         anim.SetBool("walk", horizontalInput != 0);
         anim.SetBool("grounded", isGrounded());
-        
+
+        // player jump logic
         if (Input.GetKeyDown(KeyCode.Space))
             Jump();
 
@@ -65,11 +65,11 @@ public class PlayerMovement : RewindedP
             coyoteCounter -= Time.deltaTime;
         }
     }
-    // player jump logic
+
     private void Jump()
     {
-        if (coyoteCounter <= 0 && jumpCounter <= 0) 
-            return;
+        if (coyoteCounter <= 0 && jumpCounter <= 0) return;
+
         if (isGrounded())
         {
             body.linearVelocity = new Vector2(body.linearVelocity.x, jumpPower);
@@ -87,11 +87,8 @@ public class PlayerMovement : RewindedP
                 }
             }
         }
-        
-        coyoteCounter = 0;
     }
 
-    // check if player is grounded or not
     private bool isGrounded()
     {
         RaycastHit2D raycastHit = Physics2D.BoxCast(
@@ -103,5 +100,5 @@ public class PlayerMovement : RewindedP
             groundLayer
         );
         return raycastHit.collider != null;
-    }    
+    }
 }
