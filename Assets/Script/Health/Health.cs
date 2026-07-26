@@ -54,9 +54,25 @@ public class Health : MonoBehaviour
         currentHealth = Mathf.Clamp(currentHealth + _value, 0, startingHealth);
     }
 
+    // used by PlayerRewind to restore health directly to a recorded value
+    public void SetHealth(float _value)
+    {
+        currentHealth = Mathf.Clamp(_value, 0, startingHealth);
+
+        // if rewinding brought health back above 0 after death, revive the player
+        if (dead && currentHealth > 0)
+        {
+            dead = false;
+            GetComponent<PlayerMovement>().enabled = true;
+
+            if (deathScreen != null)
+                deathScreen.HideDeathScreen();
+        }
+    }
+
     private IEnumerator ShowDeathScreenDelayed()
     {
-        yield return new WaitForSeconds(1f); // let die animation play first
+        yield return new WaitForSeconds(1f);
         deathScreen.ShowDeathScreen();
     }
 

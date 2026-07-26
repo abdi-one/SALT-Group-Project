@@ -14,8 +14,13 @@ public class DeathScreen : MonoBehaviour
         deathPanel.SetActive(true);
         promptText.text = "Press X to Restart";
         canRestart = true;
-        // don't freeze time — just stop the player via PlayerMovement.enabled = false
-        // which is already done in Health.cs
+    }
+
+    // called by Health.cs if the player rewinds back to life after dying
+    public void HideDeathScreen()
+    {
+        deathPanel.SetActive(false);
+        canRestart = false;
     }
 
     private void Update()
