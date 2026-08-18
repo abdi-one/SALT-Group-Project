@@ -1,104 +1,131 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
-public class PlayerRewind : MonoBehaviour
+
+public class RewindPlayer : MonoBehaviour
 {
-    [Header("Rewind Keys")]
-    [SerializeField] private KeyCode setKey = KeyCode.R;
-    [SerializeField] private KeyCode teleportKey = KeyCode.F;
-
-    [Header("After-image")]
-    [SerializeField] private GameObject afterImagePrefab;
-    [SerializeField] private Color afterImageColor = new Color(1f, 1f, 1f, 0.5f);
-
-    private GameObject currentAfterImage;
-    private Vector3 savedPosition;
-    private float savedHealth;
-    private bool hasSavedPoint;
-
-    private Health health;
-    private SpriteRenderer spriteRenderer;
+    [Header("Number of seconds for rewind")]
+    public float recordTime = 5f;
+    
+    //bring the list that contains player position
+    List<StoreRewindValue> StoreRewindValue;
+    
+    private bool inRewindMode = false;
+    private int timeContainer = 0;
+    
+    //unity component
     private Rigidbody2D body;
+    private PlayerMovement movement;
 
-    private void Awake()
+    private void Start()
     {
-        health = GetComponent<Health>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        StoreRewindValue = new List<StoreRewindValue>();
         body = GetComponent<Rigidbody2D>();
-
-        // loud, obvious errors if anything required is missing
-        if (health == null)
-            Debug.LogError("[PlayerRewind] No Health component found on " + gameObject.name);
-        if (body == null)
-            Debug.LogError("[PlayerRewind] No Rigidbody2D component found on " + gameObject.name);
-        if (afterImagePrefab == null)
-            Debug.LogError("[PlayerRewind] After Image Prefab is not assigned in the Inspector!");
+        movement = GetComponent<PlayerMovement>();
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(setKey))
-        {
-            Debug.Log("[PlayerRewind] R pressed - setting rewind point");
-            SetRewindPoint();
-        }
-
-        if (Input.GetKeyDown(teleportKey))
-        {
-            Debug.Log("[PlayerRewind] F pressed - teleporting to rewind point");
-            TeleportToRewindPoint();
-        }
+        //to enter rewind mode
+        if (Input.GetKeyDown(KeyCode.R)) 
+            RewindTime();
     }
 
-    private void SetRewindPoint()
+    private void FixedUpdate()
     {
-        if (afterImagePrefab == null)
-        {
-            Debug.LogWarning("[PlayerRewind] Cannot set rewind point - After Image Prefab is missing.");
-            return;
+        if (inRewindMode)
+        { 
+            //rewind backward
+            if (Input.GetKey(KeyCode.Q))
+            {
+                RewindBackwards();
+            }
+            //rewind forward
+            else if (Input.GetKey(KeyCode.E))
+            {
+                RewindForwards();
+            }
         }
-
-        savedPosition = transform.position;
-        savedHealth = health != null ? health.currentHealth : 0f;
-        hasSavedPoint = true;
-
-        if (currentAfterImage == null)
+        if (!inRewindMode)
         {
-            currentAfterImage = Instantiate(afterImagePrefab, savedPosition, transform.rotation);
-            Debug.Log("[PlayerRewind] Ghost spawned at " + savedPosition);
+            //collect player position to be used for rewind mechanic
+            Record();
         }
+    }
+    
+    void Record()
+    {
+        //calculate that the rewind only store this x amount of seconds
+        //prevent from player from rewind back to start
+        //basically overwrite position if they are x amount of seconds longer
+       int maxFrames = Mathf.RoundToInt(recordTime /  Time.fixedDeltaTime);
+       if (StoreRewindValue.Count >= maxFrames)
+           StoreRewindValue.RemoveAt(StoreRewindValue.Count - 1);
+        
+        StoreRewindValue.Insert(0, new StoreRewindValue(transform.position, transform.rotation));
+    }
+    
+    private void RewindTime()
+    {
+        inRewindMode = !inRewindMode;
+        
+        if(inRewindMode)
+            EnterRewindMode();
         else
-        {
-            currentAfterImage.transform.position = savedPosition;
-            Debug.Log("[PlayerRewind] Ghost moved to " + savedPosition);
-        }
+            ExitRewindMode();
+    }
 
-        SpriteRenderer ghostRenderer = currentAfterImage.GetComponent<SpriteRenderer>();
-        if (ghostRenderer != null && spriteRenderer != null)
+    private void EnterRewindMode()
+    {
+        //enter rewind mode
+        //character freeze in place & movement disable
+        body.isKinematic = true;
+        body.linearVelocity = Vector2.zero;
+        timeContainer = 0;
+        
+        //disable player movement in rewind mode
+        if (movement != null)
+            movement.enabled = false;
+    }
+
+    private void ExitRewindMode()
+    {
+        if (timeContainer > 0 && timeContainer < StoreRewindValue.Count)
+            StoreRewindValue.RemoveRange(0, timeContainer);
+        
+        timeContainer = 0;
+        body.isKinematic = false;
+        
+        //enable player movement in rewind mode
+        if (movement != null)
+            movement.enabled = true;
+    }
+
+    private void RewindBackwards()
+    {
+        if (timeContainer < StoreRewindValue.Count - 1)
         {
-            ghostRenderer.sprite = spriteRenderer.sprite;
-            ghostRenderer.flipX = spriteRenderer.flipX;
-            ghostRenderer.color = afterImageColor;
-        }
-        else if (ghostRenderer == null)
-        {
-            Debug.LogWarning("[PlayerRewind] The After Image Prefab has no SpriteRenderer component!");
+            timeContainer++;
+            ApplyState(StoreRewindValue[timeContainer]);
         }
     }
 
-    private void TeleportToRewindPoint()
+    private void RewindForwards()
     {
-        if (!hasSavedPoint)
+        if (timeContainer > 0)
         {
-            Debug.LogWarning("[PlayerRewind] No rewind point set yet - press R first.");
-            return;
+            timeContainer--;
+            ApplyState(StoreRewindValue[timeContainer]);
         }
+    }
 
-        transform.position = savedPosition;
-        if (health != null)
-            health.SetHealth(savedHealth);
-        if (body != null)
-            body.linearVelocity = Vector2.zero;
-
-        Debug.Log("[PlayerRewind] Teleported to " + savedPosition);
+    private void ApplyState(StoreRewindValue state)
+    {
+        //position & rotation value to be used for rewind mechanic
+        transform.position = state.position;
+        transform.rotation = state.rotation;
     }
 }

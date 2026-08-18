@@ -1441,51 +1441,6 @@ Transform:
   - {fileID: 1770238325}
   m_Father: {fileID: 223234552}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &345412026
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 345412028}
-  - component: {fileID: 345412027}
-  m_Layer: 0
-  m_Name: RewindedP
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &345412027
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 345412026}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e462aefe16336aff0967603ff9f51b7f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  velocity: {x: 0, y: 0}
---- !u!4 &345412028
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 345412026}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 58.067844, y: -38.210545, z: -0.46748465}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &354205401 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7746420430238891308, guid: dba62a729107861428da08a38ae9b6d1, type: 3}
@@ -4256,50 +4211,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1 &1063984755
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1063984757}
-  - component: {fileID: 1063984756}
-  m_Layer: 0
-  m_Name: Rewind
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1063984756
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1063984755}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7dda5bde4f199d4eaf395c653b72599, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &1063984757
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1063984755}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 58.067844, y: -38.210545, z: -0.46748465}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1086562878
 GameObject:
   m_ObjectHideFlags: 0
@@ -8269,11 +8180,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 615fe20a67b717b4586905ded2b66737, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocity: {x: 0, y: 0}
   speed: 10
   jumpPower: 20
+  maxJumps: 2
   coyoteTime: 0.25
-  extraJumps: 1
+  gravity: 10
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
@@ -8435,16 +8346,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1689856849}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25bdeb9b6b03dceb8b340e3b738a997a, type: 3}
+  m_Script: {fileID: 11500000, guid: 21a777fa165878249b897b7fd87cfd32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 1689856855}
-  combatPoint: {fileID: 1327082042}
-  combatRange: 0.5
-  combatantLayers:
-    serializedVersion: 2
-    m_Bits: 1024
-  attackDamage: 40
+  recordTime: 5
 --- !u!1 &1694167753
 GameObject:
   m_ObjectHideFlags: 0
@@ -9173,8 +9078,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7935d38ffc8656e6a8cb3a532d1c65ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 1857489074}
-  maxHealth: 100
 --- !u!1 &1870754775
 GameObject:
   m_ObjectHideFlags: 0
@@ -10529,8 +10432,6 @@ SceneRoots:
   - {fileID: 1661841086}
   - {fileID: 2147444190}
   - {fileID: 1665921458}
-  - {fileID: 1063984757}
-  - {fileID: 345412028}
   - {fileID: 1682373787}
   - {fileID: 1415319201}
   - {fileID: 1857489073}
